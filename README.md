@@ -20,7 +20,7 @@ audit trail for every ticket.
 | **Search & triage** | Full-text search across code/title/description plus status, severity, priority, assignee, reporter and unassigned filters, sorting and pagination. |
 | **Dashboard** | Aggregated metrics and status/severity/priority distributions, plus “assigned to me” workload. |
 | **Stateless JWT security** | Bearer-token authentication, BCrypt password hashing, CORS for local development, JSON error contract. |
-| **Automated tests** | 32 JUnit 5 / MockMvc / AssertJ tests covering the workflow matrix, permissions and full HTTP flows. |
+| **Automated tests** | 33 JUnit 5 / MockMvc / AssertJ tests covering the workflow matrix, permissions, HTTP flows and error mapping (404/405/415). |
 
 ## 🧱 Technology Stack
 
@@ -125,7 +125,7 @@ Data lives only for the lifetime of the process. (On macOS/Linux use `export NAM
 ### 4. Other useful commands
 
 ```bash
-mvn test                                         # 32 automated tests (H2, no MySQL required)
+mvn test                                         # 33 automated tests (H2, no MySQL required)
 mvn clean package                                # build target/bug-tracker-backend-1.0.0.jar
 java -jar target/bug-tracker-backend-1.0.0.jar   # run the packaged jar (needs MySQL)
 ```
@@ -330,14 +330,14 @@ duplicate email.
 ## 🧪 Testing
 
 ```bash
-mvn test          # 32 tests: unit + MockMvc integration (in-memory H2)
+mvn test          # 33 tests: unit + MockMvc integration (in-memory H2)
 mvn clean package # compiles, tests and builds target/bug-tracker-backend-1.0.0.jar
 ```
 
 | Suite | Coverage |
 | --- | --- |
 | `BugWorkflowServiceTest` (24 tests) | Transition matrix, administrator shortcut, resolution gates and role helpers |
-| `BugTrackerApiIntegrationTest` (8 tests) | Registration/login/401s, admin-only user management, the full bug lifecycle with 403/400/409 paths, triage & delete permissions, comments, multipart uploads (including rejected executables), search/filter/pagination and dashboard statistics |
+| `BugTrackerApiIntegrationTest` (9 tests) | Registration/login/401s, admin-only user management, the full bug lifecycle with 403/400/409 paths, triage & delete permissions, comments, multipart uploads (including rejected executables), search/filter/pagination, dashboard statistics and the 404/405/415 error mapping |
 
 Tests boot the real application context, hit the REST API through the JWT filter chain and commit
 each request — the same path a browser takes — against H2 in MySQL compatibility mode.
